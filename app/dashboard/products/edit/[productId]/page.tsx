@@ -33,6 +33,7 @@ export default async function EditProductPage({
 
   // Map the product data to match the structure expected by the form
   const productData = {
+    id:product.id,
     name: product.name,
     description: product.description ?? "",
     price: product.price,
@@ -47,7 +48,7 @@ export default async function EditProductPage({
   return (
     <div>
       <h1>Edit Product: {product.name}</h1>
-      {/* Pass productData to your edit form component */}
+
       <EditProductForm product={productData} />
     </div>
   );
