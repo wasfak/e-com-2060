@@ -8,31 +8,65 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId   String    @unique @db.String
-  email     String    @unique
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String  @unique @db.String
+  email     String  @unique
   username  String
   photo     String
-  sessionId String?   @unique @db.String
+  sessionId String? @unique @db.String
   firstName String?
   lastName  String?
-  companies Company[] @relation("UserCompanies")
+
+  products Product[]
+  reviews  Review[]
 
   @@map("users")
 }
 
-model Company {
-  id                   String    @id @default(auto()) @map("_id") @db.ObjectId
-  name                 String
-  userId               String    @db.String
-  supposedDate         DateTime?
-  givenToBoss          Boolean?  @default(false)
-  dateGivenToBoss      DateTime?
-  dateReturnedFromBoss DateTime?
-  refundsDone          Boolean?  @default(false)
-  extraDiscount        String?
-  givenToNabil         Boolean?  @default(false)
-  dateGivenToNabil     DateTime?
-  createdAt            DateTime  @default(now())
-  user                 User      @relation(fields: [userId], references: [clerkId], name: "UserCompanies")
+model Product {
+  id              String         @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  description     String?
+  price           Float
+  stock           Int            @default(0)
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  isActive        Boolean        @default(true)
+  images          ProductImage[]
+  reviews         Review[]
+  user            User           @relation(fields: [clerkId], references: [clerkId])
+  clerkId         String         @db.String
+  categories      Json // Use Json to store an array of strings
+  discount        Boolean        @default(false)
+  discountType    String? // "percent" or "fixed"
+  discountValue   Float? // e.g., 20% or $20
+  discountedPrice Float? // The calculated price after discount
+  archive         Boolean        @default(false)
+  unitsSold       Int            @default(0)
+
+  @@map("products")
+}
+
+model ProductImage {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  url       String
+  altText   String?
+  product   Product @relation(fields: [productId], references: [id])
+  productId String  @db.ObjectId
+
+  @@map("images")
+}
+
+model Review {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating    Int      @default(0)
+  comment   String?
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String   @db.ObjectId
+  user      User     @relation(fields: [clerkId], references: [clerkId])
+  clerkId   String   @db.String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("reviews")
 }

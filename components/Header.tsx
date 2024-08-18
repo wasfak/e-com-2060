@@ -5,14 +5,18 @@ import MobileNav from "./MobileNav";
 import { UserButton, auth } from "@clerk/nextjs";
 import { Button } from "./ui/button";
 
-export default function Header() {
+
+export default async function Header() {
   const { userId } = auth();
+
+
   return (
     <header className="text-black py-4 xl:py-4">
       <div className="container mx-auto flex justify-between items-center">
         <Link href="/">
-          <h1 className="text-4xl font-semibold">
-            Wasfy<span className="text-black">.</span>
+          <h1 className="text-4xl font-semibold capitalize">
+            E.Com
+            <span className="text-black">.</span>
           </h1>
         </Link>
 
