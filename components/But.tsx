@@ -8,8 +8,8 @@ type Props = {
 };
 
 export default function But({ link }: Props) {
-  console.log(link);
+
 
   const router = useRouter();
-  return <Button onClick={() => router.push(link)}>Add Item</Button>;
+  return <Button className="mb-2" onClick={() => router.push(link)}>Add Item</Button>;
 }

@@ -2,6 +2,7 @@
 
 import { auth } from "@clerk/nextjs";
 import prisma from "../db/prisma";
+import { revalidatePath } from "next/cache";
 
 interface ProductCreateValues {
   name: string;
@@ -46,7 +47,7 @@ export const createProductAction = async (values: ProductCreateValues) => {
         price: values.price,
         stock: values.stock,
         discount: values.discount,
-
+        archive: values.archive,
         discountType: values.discountType,
         discountValue: values.discountValue,
         discountedPrice: discountedPrice, // Store the calculated discounted price or null
@@ -60,8 +61,8 @@ export const createProductAction = async (values: ProductCreateValues) => {
       },
     });
 
-    console.log("Product created successfully:", newProduct);
-    return { success: true, product: newProduct };
+    revalidatePath("/dashboard/products");
+    return { success: true };
   } catch (error: any) {
     console.error("Error creating product:", error);
     return { success: false, error: error.message };

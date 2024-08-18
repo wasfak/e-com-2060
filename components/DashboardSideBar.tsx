@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { UserButton } from "@clerk/nextjs";
+
 import {
   ShoppingCartIcon,
   LayoutDashboard,
@@ -8,13 +8,20 @@ import {
   TagIcon,
 } from "lucide-react";
 import { RiDashboard3Fill } from "react-icons/ri";
-import { Montserrat } from "next/font/google";
+
 import { IoHomeSharp, IoStorefrontSharp } from "react-icons/io5";
 import { MdViewCompactAlt } from "react-icons/md";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const montserrat = Montserrat({ weight: "600", subsets: ["latin"] });
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const routes = [
   {
@@ -60,7 +67,15 @@ const routes = [
 ] as const;
 
 export default function DashboardSideBar() {
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return "";
+  }
 
   return (
     <div className="relative space-y-4 py-4 flex flex-col bg-gray-900 text-gray-100 h-screen">
@@ -78,7 +93,6 @@ export default function DashboardSideBar() {
                   }`}
                 >
                   <div className="flex items-center flex-1 space-x-3">
-                    {/*  <route.icon className="text-lg" /> */}
                     <IconComponent className="text-lg" />
                     <span>{route.label}</span>
                   </div>

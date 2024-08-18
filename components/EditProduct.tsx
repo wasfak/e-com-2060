@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,7 +13,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
 import {
   Select,
   SelectContent,
@@ -24,13 +23,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/LoadingButton";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
-import { createProductAction } from "@/lib/actions/createProduct";
+import { updateProductAction } from "@/lib/actions/modifyProduct";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -50,26 +47,20 @@ const formSchema = z.object({
   discountType: z.enum(["percent", "fixed"]).optional(),
   discountValue: z.number().min(1).optional(),
   images: z.array(z.object({ url: z.string() })), // Use object array to store image URLs
+  id: z.string(),
 });
 
-export default function AddNewProduct() {
-  const [imageUrls, setImageUrls] = useState<{ url: string }[]>([]);
+interface EditProductFormProps {
+  product: z.infer<typeof formSchema>;
+}
+
+export default function EditProductForm({ product }: EditProductFormProps) {
+  const [imageUrls, setImageUrls] = useState<{ url: string }[]>(product.images);
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useUser();
-  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      price: 0,
-      stock: 0,
-      description: "",
-      discount: false,
-      archive: false,
-      discountType: undefined,
-      images: [],
-    },
+    defaultValues: product, // Pre-populate the form with the product data
   });
 
   const uploadImageToCloudinary = async (file: File) => {
@@ -119,16 +110,9 @@ export default function AddNewProduct() {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-    const response = await createProductAction({
-      ...values,
-      discountType:
-        values.discountType === "percent" || values.discountType === "fixed"
-          ? values.discountType
-          : undefined, // Ensure discountType is valid or undefined
-    });
+    const response = await updateProductAction(values);
 
-    toast("Item has been created");
+    toast("Product has been updated");
   };
 
   if (isLoading) {
@@ -324,7 +308,7 @@ export default function AddNewProduct() {
             className="ml-4"
             loading={form.formState.isSubmitting}
           >
-            Submit
+            Update Product
           </LoadingButton>
         </form>
       </Form>

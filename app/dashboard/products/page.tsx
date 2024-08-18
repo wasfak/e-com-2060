@@ -18,6 +18,7 @@ export default async function ProductsPage() {
       images: true,
     },
   });
+
   if (products.length === 0) {
     return (
       <div>
@@ -27,10 +28,13 @@ export default async function ProductsPage() {
     );
   }
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
-      {products.map((product) => (
-        <ProductDisplayer key={product.id} product={product} />
-      ))}
+    <div className="">
+      <But link="products/new" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+        {products.map((product) => (
+          <ProductDisplayer key={product.id} product={product} />
+        ))}
+      </div>
     </div>
   );
 }
