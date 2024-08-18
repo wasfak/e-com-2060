@@ -1,4 +1,4 @@
-"use server";
+/* "use server";
 
 import prisma from "../db/prisma";
 
@@ -38,3 +38,4 @@ export async function createCategory({
 
   return categoryRecords;
 }
+ */
