@@ -2,5 +2,5 @@ stock less than red  //
 add product button  //
 categoires
 sooner pop up  //
-make all of it smaller
+
 make img a main img

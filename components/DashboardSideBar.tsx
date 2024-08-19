@@ -29,20 +29,16 @@ const routes = [
     icon: RiDashboard3Fill,
     href: "/dashboard",
   },
-  {
-    label: "Orders",
-    icon: ShoppingCartIcon,
-    href: "/dashboard/orders",
-  },
+
   {
     label: "Products",
     icon: ShoppingBagIcon,
     href: "/dashboard/products",
   },
   {
-    label: "Analytics",
-    icon: TagIcon,
-    href: "/dashboard/plau",
+    label: "Orders",
+    icon: ShoppingCartIcon,
+    href: "/dashboard/orders",
   },
   {
     label: "Categories",
@@ -62,7 +58,7 @@ const routes = [
   {
     label: "Store Management",
     icon: IoStorefrontSharp,
-    href: "/dashboard/Store",
+    href: "/dashboard/store",
   },
 ] as const;
 
